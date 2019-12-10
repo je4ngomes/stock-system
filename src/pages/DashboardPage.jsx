@@ -32,7 +32,7 @@ const DashboardPage = () => {
                         background: '#fff',
                         padding: 24,
                         margin: 0,
-                        minHeight: 280,
+                        height:"100vh",
                         }}
                     >
                         <Route path={`${match.path}/products`}></Route>

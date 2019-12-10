@@ -50,7 +50,7 @@ const RegisterAccountForm = ({
     const prefixSelector = getFieldDecorator('prefix', {
         initialValue: '55',
     })(
-        <Select style={{ width: 70 }} showSearch>
+        <Select style={{ width: 90, textAlign: 'center' }} showSearch>
             {countryCodes.map(country => (
                 <Option 
                     value={country.dial_code.replace('+', '')}>
@@ -62,7 +62,7 @@ const RegisterAccountForm = ({
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Form.Item style={{marginBottom: 5}}>
+            <Form.Item style={{marginBottom: 10}}>
                 {getFieldDecorator('fullName', {
                     rules: [{ required: true, message: 'Por favor, digite seu nome completo.' }]
                 })(
@@ -74,7 +74,7 @@ const RegisterAccountForm = ({
                 )}
             </Form.Item>
 
-            <Form.Item style={{marginBottom: 5}}>
+            <Form.Item style={{marginBottom: 10}}>
                 {getFieldDecorator('nickname', {
                     rules: [{ required: true, message: 'Por favor, digite seu nome de usuário.', whitespace: true }],
             })(
@@ -85,7 +85,7 @@ const RegisterAccountForm = ({
                     className='bg__input'/>
             )}
             </Form.Item>
-            <Form.Item style={{marginBottom: 5}}>
+            <Form.Item style={{marginBottom: 10}}>
                 {getFieldDecorator('email', {
                     rules: [
                         {
@@ -106,7 +106,7 @@ const RegisterAccountForm = ({
                 )}
             </Form.Item>
 
-            <Form.Item style={{marginBottom: 5}} hasFeedback>
+            <Form.Item style={{marginBottom: 10}} hasFeedback>
             {getFieldDecorator('password', {
                 rules: [
                 {
@@ -127,7 +127,7 @@ const RegisterAccountForm = ({
                 />,
             )}
             </Form.Item>
-            <Form.Item style={{marginBottom: 5}}  hasFeedback>
+            <Form.Item style={{marginBottom: 10}}  hasFeedback>
             {getFieldDecorator('confirm', {
                 rules: [
                 {
@@ -150,7 +150,7 @@ const RegisterAccountForm = ({
             )}
             </Form.Item>
 
-            <Form.Item style={{marginBottom: 5}}>
+            <Form.Item style={{marginBottom: 10}}>
                 {getFieldDecorator('phone', {
                     rules: [{ required: true, message: 'Please input your phone number!' }],
                 })(

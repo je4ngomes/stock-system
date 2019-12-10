@@ -23,7 +23,7 @@ function RegisterAccountPage() {
                 </Col>
             </Row>
             <Row>
-                <Col span={9} offset={8} style={{ position: 'relative', top: '4rem' }}>
+                <Col span={7} offset={9} style={{ position: 'relative', top: '4rem' }}>
                     <PaneContainer 
                         background='#263238'
                     >

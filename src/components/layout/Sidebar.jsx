@@ -10,18 +10,17 @@ const Sidebar = () => {
     return (
         <Menu
             style={{ 
-                width: 210,
+                width: 200,
                 textAlign: 'left',
-                position: 'fixed',
-                height: '100%'
+                position: 'relative'
             }}
             defaultSelectedKeys={['0']}
-            mode="inline"
+            mode="vertical"
         >
              <Menu.Item key="0">
                 <Icon type='home' />
                 <span>Início</span>
-                <Link to={`${match.url}/`} />
+                <Link to={`${match.url}`} />
             </Menu.Item>
             <Menu.Item key="1">
                 <Icon type='book' />
