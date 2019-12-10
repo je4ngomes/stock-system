@@ -1,0 +1,45 @@
+@import '~antd/dist/antd.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+
+/* COVERS */
+body {
+    height: 100% !important;
+    margin: 0;
+}
+
+.auth__page {
+    height: 100%;
+    background-image: url(../img/login__cover.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    position: fixed;
+    width: 100%;
+    min-height: 100%;
+    background-size: cover;
+}
+
+.bg__input input {
+    background: #41535c !important;
+    border-color: #455a64;
+    color: #fff;
+}
+
+.ant-select-selection--single {
+    background: #394850 !important;
+    color: #fff;
+}
+
+.ant-layout-header {
+    height: 48px;
+    padding: 0;
+}
+
+.logo {
+    margin: 5px 0 0 15px;
+    float: left;
+}
