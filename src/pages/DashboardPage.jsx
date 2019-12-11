@@ -1,15 +1,17 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, useRouteMatch } from 'react-router-dom';
+import { Route, useRouteMatch, useLocation } from 'react-router-dom';
 import { Layout, Breadcrumb } from 'antd';
 import Title from 'antd/lib/typography/Title';
 
 import Topbar from '../components/layout/Topbar';
 import Sidebar from '../components/layout/Sidebar';
+import CategoriesPage from './CategoriesPage';
 
 const { Header, Content, Sider } = Layout;
 
 const DashboardPage = () => {
     const match = useRouteMatch();
+    const location = useLocation();
 
     return (
         <Layout>
@@ -25,7 +27,7 @@ const DashboardPage = () => {
                 </Sider>
                 <Layout style={{ padding: '0 24px 24px 34px' }}>
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left' }}>
-                        <Breadcrumb.Item>Início</Breadcrumb.Item>
+                        {location.pathname.split('/').map(x => (<Breadcrumb.Item>{x}</Breadcrumb.Item>))}
                     </Breadcrumb>
                     <Content
                         style={{
@@ -37,10 +39,12 @@ const DashboardPage = () => {
                     >
                         <Route path={`${match.path}/products`}></Route>
                         <Route path={`${match.path}/orders`}></Route>
-                        <Route path={`${match.path}/categories`}></Route>
+                        <Route path={`${match.path}/categories`}>
+                            <CategoriesPage />
+                        </Route>
                         <Route path={`${match.path}/events`}></Route>
                         <Route path={`${match.path}/statistics`}></Route>
-                        <Route path={`${match.path}/config/my_account`}></Route>
+                        <Route path={`${match.path}/config/account`}></Route>
                     </Content>
                 </Layout>
             </Layout>

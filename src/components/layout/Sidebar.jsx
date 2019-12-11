@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch, useLocation } from 'react-router-dom';
 import { Menu, Icon } from 'antd';
 
 const { SubMenu } = Menu;
 
 const Sidebar = () => {
     const match = useRouteMatch();
+    const location = useLocation();
 
     return (
         <Menu
@@ -14,30 +15,30 @@ const Sidebar = () => {
                 textAlign: 'left',
                 position: 'relative'
             }}
-            defaultSelectedKeys={['0']}
+            defaultSelectedKeys={[location.pathname]}
             mode="vertical"
         >
-             <Menu.Item key="0">
+             <Menu.Item key={match.url}>
                 <Icon type='home' />
                 <span>Início</span>
                 <Link to={`${match.url}`} />
             </Menu.Item>
-            <Menu.Item key="1">
+            <Menu.Item key={`${match.url}/products`}>
                 <Icon type='book' />
                 <span>Produtos</span>
                 <Link to={`${match.url}/products`} />
             </Menu.Item>
-            <Menu.Item key="2">
+            <Menu.Item key={`${match.url}/categories`}>
                 <Icon type="unordered-list" />
                 <span>Categorias</span>
                 <Link to={`${match.url}/categories`} />
             </Menu.Item>
-            <Menu.Item key="3">
+            <Menu.Item key={`${match.url}/orders`}>
                 <Icon type='schedule' />
                 <span>Pedidos</span>
                 <Link to={`${match.url}/orders`} />
             </Menu.Item>
-            <Menu.Item key="4">
+            <Menu.Item key={`${match.url}/events`}>
                 <Icon type='carry-out' />
                 <span>Eventos</span>
                 <Link to={`${match.url}/events`} />
@@ -51,7 +52,7 @@ const Sidebar = () => {
                     </span>
                 }
             >
-                <Menu.Item key="6">
+                <Menu.Item key={`${match.url}/statistics`}>
                     <Link to={`${match.url}/statistics`}>Relatório</Link>
                 </Menu.Item>
             </SubMenu>
