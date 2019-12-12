@@ -50,11 +50,11 @@ const RegisterAccountForm = ({
     const prefixSelector = getFieldDecorator('prefix', {
         initialValue: '55',
     })(
-        <Select style={{ width: 90, textAlign: 'center' }} showSearch>
+        <Select style={{ width: 150, textAlign: 'center' }} showSearch>
             {countryCodes.map(country => (
                 <Option 
                     value={country.dial_code.replace('+', '')}>
-                    {country.dial_code}
+                    {country.name}
                 </Option>
             ))}
         </Select>,
@@ -174,7 +174,13 @@ const RegisterAccountForm = ({
             )}
             <Link to='/' style={{ float: 'right' }}>Já possui conta</Link>
             
-            <Button disabled={(!getFieldValue('agreement') && true)} style={{ width: '100%' }} type="primary" htmlType="submit">
+            <Button 
+                disabled={(!getFieldValue('agreement'))} 
+                style={{ width: '100%' }} 
+                type="primary"
+                shape='round' 
+                htmlType="submit"
+            >
                 Register
             </Button>
             

@@ -24,7 +24,7 @@ const NewCategoryModal = forwardRef(({
             <Form layout="vertical">
                 <Form.Item label="Titulo">
                     {getFieldDecorator('title', {
-                    rules: [{ required: true, message: 'Por favor, insira um titulo a descrição.' }],
+                    rules: [{ required: true, message: 'Por favor, insira um titulo.' }],
                     })(<Input />)}
                 </Form.Item>
                 <Form.Item label="Descrição">

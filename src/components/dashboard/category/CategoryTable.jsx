@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Table, Popconfirm, Form } from 'antd';
+import { Table, Popconfirm, Form, Divider, Icon, Button } from 'antd';
 
 import EditableContext from './EditableContext';
 import EditableCell from './EditableCell';
@@ -20,7 +20,6 @@ const data = [
 
 const CategoryTable = ({ form }) => {
     const formFromConsumer = useContext(EditableContext);
-    const [selectedRows, setSelectedRows] = useState([]);
     const [state, setState] = useState({
         editingKey: '',
 
@@ -29,6 +28,7 @@ const CategoryTable = ({ form }) => {
     const isEditing = record => record.key === state.editingKey;
     const cancel = () => setState({ editingKey: '' });
     const edit = key => setState({ editingKey: key });
+    const deleteItem = () => null;
     const save = () => (0);
 
     const columns = [
@@ -50,31 +50,47 @@ const CategoryTable = ({ form }) => {
                 const { editingKey } = state;
                 const editable = isEditing(record);
                 return editable ? (
-                    <span>
-                        <a
+                    <>
+                        <Button
                             onClick={() => save(formFromConsumer, record.key)}
                             style={{ marginRight: 8 }}
+                            type='primary'
+                            shape='circle'
                         >
-                            Save
-                        </a>
-                        <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(record.key)}>
-                            <a>Cancel</a>
+                            <Icon type='save' />
+                        </Button>
+                        <Popconfirm title="Deseja cancelar operação?" onConfirm={() => cancel(record.key)}>
+                            <Button
+                                type='danger'
+                                shape='circle'
+                            >
+                                <Icon type='close' />
+                            </Button>
                         </Popconfirm>
-                    </span>
+                    </>
                 ) : (
-                    <a disabled={editingKey !== ''} onClick={() => edit(record.key)}>
-                        Edit
-                    </a>
+                    <>
+                        <Button
+                            shape='circle' 
+                            disabled={editingKey !== ''}
+                            type='primary' 
+                            onClick={() => edit(record.key)}
+                        >
+                            <Icon type='edit' />
+                        </Button>
+                        <Divider type='vertical' />
+                        <Button
+                            shape='circle' 
+                            type='danger' 
+                            onClick={() => deleteItem(record.key)}
+                        >
+                            <Icon type='delete' />
+                        </Button>
+                    </>                    
                 );
                 }
         }
     ];
-
-    const rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        }
-    }
 
     const columnsEdit = columns.map(col => {
         if (!col.editable) {
@@ -84,7 +100,7 @@ const CategoryTable = ({ form }) => {
             ...col,
             onCell: record => ({
                 record,
-                inputType: col.dataIndex === 'age' ? 'number' : 'text',
+                inputType: 'text',
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),
@@ -94,8 +110,7 @@ const CategoryTable = ({ form }) => {
 
     return (
         <EditableContext.Provider value={form}>
-            <Table 
-                rowSelection={rowSelection}
+            <Table
                 components={{ body: { cell: EditableCell } }}
                 style={{ marginTop: 20 }}
                 rowClassName="editable-row"

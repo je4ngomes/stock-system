@@ -56,7 +56,8 @@ const LoginForm = ({
                 </a>
                 <Button 
                     type="primary"
-                    htmlType="submit" 
+                    htmlType="submit"
+                    shape='round' 
                     style={{ width: '100%' }}
                     className="login__form__button">
                     Login

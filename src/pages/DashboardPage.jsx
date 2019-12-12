@@ -6,6 +6,7 @@ import Title from 'antd/lib/typography/Title';
 import Topbar from '../components/layout/Topbar';
 import Sidebar from '../components/layout/Sidebar';
 import CategoriesPage from './CategoriesPage';
+import ProductsPage from './ProductsPage';
 
 const { Header, Content, Sider } = Layout;
 
@@ -37,14 +38,16 @@ const DashboardPage = () => {
                         height:"100vh",
                         }}
                     >
-                        <Route path={`${match.path}/products`}></Route>
+                        <Route path={`${match.path}/products`}>
+                            <ProductsPage />
+                        </Route>
                         <Route path={`${match.path}/orders`}></Route>
                         <Route path={`${match.path}/categories`}>
                             <CategoriesPage />
                         </Route>
                         <Route path={`${match.path}/events`}></Route>
                         <Route path={`${match.path}/statistics`}></Route>
-                        <Route path={`${match.path}/config/account`}></Route>
+                        <Route path={`${match.path}/configuration/account`}></Route>
                     </Content>
                 </Layout>
             </Layout>

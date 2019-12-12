@@ -12,6 +12,7 @@ const Sidebar = () => {
         <Menu
             style={{ 
                 width: 200,
+                height: '100%',
                 textAlign: 'left',
                 position: 'relative'
             }}
@@ -68,7 +69,7 @@ const Sidebar = () => {
                 <Menu.Item key="7">
                     <Icon type="user" />
                     <span>Minha conta</span>
-                    <Link to={`${match.url}/config/my_account`} />
+                    <Link to={`${match.url}/configuration/account`} />
                 </Menu.Item>
             </SubMenu>
         </Menu>
