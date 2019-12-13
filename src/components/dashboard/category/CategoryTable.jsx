@@ -76,7 +76,7 @@ const CategoryTable = ({ form }) => {
                             type='primary' 
                             onClick={() => edit(record.key)}
                         >
-                            <Icon type='edit' />
+                            <Icon type='edit' theme='filled' />
                         </Button>
                         <Divider type='vertical' />
                         <Button
@@ -84,7 +84,7 @@ const CategoryTable = ({ form }) => {
                             type='danger' 
                             onClick={() => deleteItem(record.key)}
                         >
-                            <Icon type='delete' />
+                            <Icon type='delete' theme='filled' />
                         </Button>
                     </>                    
                 );

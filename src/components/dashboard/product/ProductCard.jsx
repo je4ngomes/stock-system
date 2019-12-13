@@ -1,24 +1,46 @@
 import React from 'react';
-import { Card, Icon } from 'antd';
+import { Card, Icon, Button } from 'antd';
 import Meta from 'antd/lib/card/Meta';
+import DisplayPrice from './DisplayPrice';
 
-const ProductCard = () => (
+const ProductCard = ({
+    imgSrc,
+    price,
+    title
+}) => (
     <Card
-        style={{ width: 300 }}
-        hoverable
+        style={{ width: 250 }}
+        size='small'
+        className='shadow'
         cover={
             <img
-                alt="example"
-                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                alt='example'
+                src={imgSrc}
             />
         }
         actions={[
-            <Icon type="edit" key="edit" />,
+            (
+                <Button
+                    type='primary'
+                    shape='circle'    
+                >
+                    <Icon type='edit' key='edit' theme='filled' />
+                </Button>
+            ),
+            (
+                <Button
+                    type='danger'
+                    shape='circle'    
+                >
+                    <Icon type='delete' key='delete' theme='filled' />
+                </Button>
+            )
+
         ]}
     >
         <Meta
-            title="Card title"
-            description="This is the description"
+            title={<DisplayPrice price={price} />}
+            description={title}
         />
     </Card>
 );

@@ -18,7 +18,7 @@ const DashboardPage = () => {
         <Layout>
             <Header style={{ padding: 'none !important' }} className="header">
                 <div className="logo">
-                    <Title style={{ color: '#424242' }} level={3}>Global Manager</Title>
+                    <Title style={{ color: '#424242' }} level={3}>Logo</Title>
                 </div>
                 <Topbar/>
             </Header>
@@ -35,7 +35,7 @@ const DashboardPage = () => {
                         background: '#fff',
                         padding: 24,
                         margin: 0,
-                        height:"100vh",
+                        minHeight:"100vh",
                         }}
                     >
                         <Route path={`${match.path}/products`}>

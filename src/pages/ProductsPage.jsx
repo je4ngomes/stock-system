@@ -3,6 +3,7 @@ import { Button, Row, Col, Layout, Icon } from 'antd';
 
 import Title from 'antd/lib/typography/Title';
 import ProductCard from '../components/dashboard/product/ProductCard';
+import ProductCardCollection from '../components/dashboard/product/ProductCardCollection';
 
 const { Header, Content } = Layout;
 
@@ -30,9 +31,8 @@ const CategoriesPage = () => {
             </Header>
             <Content>
                 <Row>
-                    <Col span={24}>
-                        <ProductCard />
-                    </Col>
+                    <ProductCardCollection 
+                        collection={[{ imgSrc: 'https://images.tcdn.com.br/img/img_prod/15959/console_playstation_4_pro_2_controles_4k_hd_1tb_hdmi_13632_2_20190124135815.jpg', title: 'Playstation 4 pro', price:1500 }]}/>
                 </Row>
             </Content>
         </div>
