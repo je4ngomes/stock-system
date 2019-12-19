@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
     Form, 
     Icon, 
     Input, 
     Button, 
-    Checkbox
+    Checkbox,
+    message
 } from 'antd';
+import { loginUser } from '../../store/actions/authAction';
 
 const LoginForm = ({ 
     form: { 
@@ -14,23 +17,43 @@ const LoginForm = ({
         getFieldsValue
     } 
 }) => {
+    const authError = useSelector(state => state.auth.error);
+    const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(getFieldsValue());
+        const { email, password } = getFieldsValue();
+        console.log(email)
+        dispatch(loginUser({ email, password }));
     };
+
+
+    useEffect(() => {
+        console.log(authError)
+        if (authError)
+            message.error(authError.message, 15);
+    }, [authError]);
     
     return (
         <Form onSubmit={handleSubmit} className="login__form">
-            <Form.Item>
-                {getFieldDecorator('username', {
-                    rules: [{ required: true, message: 'Please input your username!' }],
+            <Form.Item style={{marginBottom: 10}}>
+                {getFieldDecorator('email', {
+                    rules: [
+                        {
+                            type: 'email',
+                            message: 'Por favor, digite um e-mail válido',
+                        },
+                        {
+                            required: true,
+                            message: 'Por favor, digite seu e-mail.',
+                        },
+                    ],
                 })(
                     <Input
-                        prefix={<Icon type="user" style={{ color: '#fff' }} />}
-                        placeholder="Username"
-                        className='bg__input'
-                    />,
+                        prefix={<Icon type="mail" style={{ color: '#fff' }} />}
+                        placeholder="E-mail"
+                        required
+                        className='bg__input'/>
                 )}
             </Form.Item>
             <Form.Item>
@@ -48,7 +71,7 @@ const LoginForm = ({
             <Form.Item>
                 {getFieldDecorator('remember', {
                     valuePropName: 'checked',
-                    initialValue: true,
+                    initialValue: false,
                 })(<Checkbox style={{ color: '#fff' }}>Lembrar de mim</Checkbox>)}
             
                 <a className="login__form__forgot" style={{ float: 'right' }} href="">

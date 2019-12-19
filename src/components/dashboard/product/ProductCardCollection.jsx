@@ -5,12 +5,9 @@ import ProductCard from './ProductCard';
 
 const ProductCardCollection = ({ collection }) => (
     <Row gutter={[16, 16]}>
-        {collection.map(item => (
+        {collection.map(product => (
             <Col span={6}>
-                <ProductCard
-                    imgSrc={item.imgSrc}
-                    title={item.title}
-                    price={item.price} />
+                <ProductCard product={product}/>
             </Col>
         ))}
     </Row>

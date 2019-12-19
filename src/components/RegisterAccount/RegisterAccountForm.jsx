@@ -50,9 +50,10 @@ const RegisterAccountForm = ({
     const prefixSelector = getFieldDecorator('prefix', {
         initialValue: '55',
     })(
-        <Select style={{ width: 150, textAlign: 'center' }} showSearch>
-            {countryCodes.map(country => (
-                <Option 
+        <Select className='login__select' style={{ width: 150, textAlign: 'center' }} showSearch>
+            {countryCodes.map((country, i) => (
+                <Option
+                    key={i} 
                     value={country.dial_code.replace('+', '')}>
                     {country.name}
                 </Option>
@@ -74,17 +75,6 @@ const RegisterAccountForm = ({
                 )}
             </Form.Item>
 
-            <Form.Item style={{marginBottom: 10}}>
-                {getFieldDecorator('nickname', {
-                    rules: [{ required: true, message: 'Por favor, digite seu nome de usuário.', whitespace: true }],
-            })(
-                <Input
-                    prefix={<Icon type="user" style={{ color: '#fff' }} />}
-                    placeholder="Usuário"
-                    required
-                    className='bg__input'/>
-            )}
-            </Form.Item>
             <Form.Item style={{marginBottom: 10}}>
                 {getFieldDecorator('email', {
                     rules: [
@@ -163,7 +153,6 @@ const RegisterAccountForm = ({
                     />)}
             </Form.Item>
 
-
         <Form.Item>
             {getFieldDecorator('agreement', {
                 valuePropName: 'checked',
@@ -188,12 +177,5 @@ const RegisterAccountForm = ({
       </Form>
     )
 }
-
-
-
-
-
-
-
 
 export default Form.create({ name: 'register' })(RegisterAccountForm);

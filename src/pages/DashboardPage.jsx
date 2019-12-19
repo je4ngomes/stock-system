@@ -5,8 +5,10 @@ import Title from 'antd/lib/typography/Title';
 
 import Topbar from '../components/layout/Topbar';
 import Sidebar from '../components/layout/Sidebar';
+
 import CategoriesPage from './CategoriesPage';
 import ProductsPage from './ProductsPage';
+import EventPage from './EventPage';
 
 const { Header, Content, Sider } = Layout;
 
@@ -45,7 +47,9 @@ const DashboardPage = () => {
                         <Route path={`${match.path}/categories`}>
                             <CategoriesPage />
                         </Route>
-                        <Route path={`${match.path}/events`}></Route>
+                        <Route path={`${match.path}/events`}>
+                            <EventPage />
+                        </Route>
                         <Route path={`${match.path}/statistics`}></Route>
                         <Route path={`${match.path}/configuration/account`}></Route>
                     </Content>

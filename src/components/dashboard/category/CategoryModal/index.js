@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import NewCategoryModal from './NewCategoryModal';
 
-const CategoryModal = ({ stateVisible: [visible, setVisible] }) => {
+export default () => {
     const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
+
     const formRef = useRef(null);
 
     const onCreate = () => {
@@ -23,12 +25,10 @@ const CategoryModal = ({ stateVisible: [visible, setVisible] }) => {
     return (
         <NewCategoryModal
             wrappedComponentRef={ref => (formRef.current = ref)}
-            visible={visible}
+            visibleState={[visible, setVisible]}
             loading={loading}
             onCancel={() => setVisible(false)}
             onCreate={onCreate}
         />
     )
-}
-
-export default CategoryModal;
+};
