@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 import {
   Form,
   Input,
@@ -7,9 +8,11 @@ import {
   Select,
   Checkbox,
   Button,
+  message,
 } from 'antd';
 
 import countryCodes from '../../assets/countryCode.json';
+import { signUp } from '../../store/actions/authAction.js';
 
 const { Option } = Select;
 
@@ -21,15 +24,44 @@ const RegisterAccountForm = ({
     }
 }) => {
     const [confirmPass, setConfirmPass] = useState(false);
+    const {  authError, isLoading, auth } = useSelector(state => ({
+        auth: state.firebase.auth,
+        isLoading: state.auth.isLoading,
+        authError: state.auth.error
+    }));
+    const dispatch = useDispatch();
 
     const handleSubmit = e => {
         e.preventDefault();
  
+        validateFields((err, values) => {
+            if (err) return;
+
+            dispatch(signUp({
+                creds: {
+                    email: values.email,
+                    password: values.password
+                },
+                userInfo: {
+                    fullName: values.fullName,
+                    prefix: values.prefix,
+                    phoneNumber: values.phone
+                }
+            }));
+        })
     };
 
     const compareToFirstPassword = (rule, value, callback) => {
         if (value && value !== getFieldValue('password')) {
             callback('Senhas diferentes!');
+        } else {
+            callback();
+        }
+    };
+
+    const isLt6Char = (rule, value, callback) => {
+        if (value.length < 6) {
+            callback('Senha precisar ser maior ou igual a 6 caracteres.');
         } else {
             callback();
         }
@@ -60,6 +92,13 @@ const RegisterAccountForm = ({
             ))}
         </Select>,
     );
+
+    useEffect(() => {
+        if (authError)
+            message.error(authError.message, 3);
+    }, [authError]);
+
+    if (auth.uid && !authError) return <Redirect to='/' />
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -106,6 +145,7 @@ const RegisterAccountForm = ({
                 {
                     validator: validateToNextPassword,
                 },
+                { validator: isLt6Char }
                 ],
             })(
                 <Input
@@ -161,13 +201,14 @@ const RegisterAccountForm = ({
                     I have read the <a href="">agreement</a>
                 </Checkbox>
             )}
-            <Link to='/' style={{ float: 'right' }}>Já possui conta</Link>
+            <Link to='/login' style={{ float: 'right' }}>Já possui conta</Link>
             
             <Button 
                 disabled={(!getFieldValue('agreement'))} 
                 style={{ width: '100%' }} 
                 type="primary"
-                shape='round' 
+                shape='round'
+                loading={isLoading} 
                 htmlType="submit"
             >
                 Register

@@ -9,29 +9,42 @@ import {
     Checkbox,
     message
 } from 'antd';
-import { loginUser } from '../../store/actions/authAction';
+
+import { signIn } from '../../store/actions/authAction';
+import useRedirectAuthenticatedUser from '../../hooks/useRedirectAuthenticatedUser';
 
 const LoginForm = ({ 
     form: { 
         getFieldDecorator,
-        getFieldsValue
+        validateFields
     } 
-}) => {
-    const authError = useSelector(state => state.auth.error);
+}) => {   
+    const {  authError, isLoading, auth } = useSelector(state => ({
+        auth: state.firebase.auth,
+        isLoading: state.auth.isLoading,
+        authError: state.auth.error
+    }));
     const dispatch = useDispatch();
+
+    useRedirectAuthenticatedUser({
+        redirectAdminTo: '/dashboard',
+        redirectUserTo: '/'
+    }, [auth.uid]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { email, password } = getFieldsValue();
-        console.log(email)
-        dispatch(loginUser({ email, password }));
+        
+        validateFields((err, { email, password, remember }) => {
+            if (err) return;
+
+            dispatch(signIn({ email: email.trim(), password, remember  }));
+        });
     };
 
-
+    
     useEffect(() => {
-        console.log(authError)
         if (authError)
-            message.error(authError.message, 15);
+            message.error(authError.message, 3);
     }, [authError]);
     
     return (
@@ -39,6 +52,7 @@ const LoginForm = ({
             <Form.Item style={{marginBottom: 10}}>
                 {getFieldDecorator('email', {
                     rules: [
+                        { transform: val => val.trim() },
                         {
                             type: 'email',
                             message: 'Por favor, digite um e-mail válido',
@@ -48,6 +62,7 @@ const LoginForm = ({
                             message: 'Por favor, digite seu e-mail.',
                         },
                     ],
+                    
                 })(
                     <Input
                         prefix={<Icon type="mail" style={{ color: '#fff' }} />}
@@ -80,7 +95,8 @@ const LoginForm = ({
                 <Button 
                     type="primary"
                     htmlType="submit"
-                    shape='round' 
+                    shape='round'
+                    loading={isLoading} 
                     style={{ width: '100%' }}
                     className="login__form__button">
                     Login

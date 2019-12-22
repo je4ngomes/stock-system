@@ -75,3 +75,16 @@ button[type=submit]:disabled:hover {
     font-size: 18pt;
     color: #7e57c2;
 }
+
+.center-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 90vh;
+}
+
+.ant-card-meta-detail > div:not(:last-child) {
+    margin-bottom: 0;
+}

@@ -5,8 +5,8 @@ import ProductCard from './ProductCard';
 
 const ProductCardCollection = ({ collection }) => (
     <Row gutter={[16, 16]}>
-        {collection.map(product => (
-            <Col span={6}>
+        {collection.map((product, i) => (
+            <Col span={6} key={i}>
                 <ProductCard product={product}/>
             </Col>
         ))}

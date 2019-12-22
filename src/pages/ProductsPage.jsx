@@ -4,7 +4,7 @@ import { Row, Col, Layout, Pagination } from 'antd';
 import Title from 'antd/lib/typography/Title';
 
 import ProductCardCollection from '../components/dashboard/product/ProductCardCollection';
-import ProductModal from '../components/dashboard/product/ProductModal/ProductModal';
+import ProductModal from '../components/dashboard/product/ProductModal';
 import SearcheableForm from '../components/SearcheableForm';
 
 const { Header, Content } = Layout;

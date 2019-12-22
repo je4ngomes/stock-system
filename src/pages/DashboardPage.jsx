@@ -1,5 +1,6 @@
 import React from 'react';
-import { Route, useRouteMatch, useLocation } from 'react-router-dom';
+import firebase from 'firebase';
+import { Route, useRouteMatch, useLocation, useHistory } from 'react-router-dom';
 import { Layout, Breadcrumb } from 'antd';
 import Title from 'antd/lib/typography/Title';
 
@@ -9,12 +10,24 @@ import Sidebar from '../components/layout/Sidebar';
 import CategoriesPage from './CategoriesPage';
 import ProductsPage from './ProductsPage';
 import EventPage from './EventPage';
+import useOnAuthChange from '../hooks/useOnAuthChange';
 
 const { Header, Content, Sider } = Layout;
 
 const DashboardPage = () => {
     const match = useRouteMatch();
     const location = useLocation();
+    const history = useHistory();
+
+    useOnAuthChange(user => {
+        // only logged users has access to this page.
+        if (!user) history.push('/login');
+    
+        // but only those who has admin privileges can stay
+        const currentUser = firebase.auth().currentUser;
+        if (!currentUser) return;
+        currentUser.getIdTokenResult(({ claims: { isAdmin } }) => !isAdmin && history.push('/'));
+    });
 
     return (
         <Layout>

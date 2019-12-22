@@ -1,16 +1,21 @@
-import React, { forwardRef, useImperativeHandle } from 'react';
+import React, { useState } from 'react';
 import { Modal, Form, Input, Button, Icon } from 'antd';
 
-const NewCategoryModal = forwardRef(({
-    visibleState: [visible, setVisible],
+const NewCategoryModal = ({
     loading,
     onCancel,
-    onCreate,
-    form
-}, ref) => {
-    const { getFieldDecorator } = form;
+    submit,
+    form: { getFieldDecorator, validateFields }
+}) => {
+    const [visible, setVisible] = useState(false);
 
-    useImperativeHandle(ref, () => ({ form }));
+    const handleSubmit = _ => {
+        validateFields((err, values) => {
+            if(err) return;
+
+            submit(values);
+        });
+    }
 
     return (
         <>
@@ -26,8 +31,8 @@ const NewCategoryModal = forwardRef(({
                 title="Adiciona nova categoria"
                 okText="Create"
                 confirmLoading={loading}
-                onCancel={onCancel}
-                onOk={onCreate}
+                onCancel={() => setVisible(false)}
+                onOk={handleSubmit}
             >
                 <Form layout="vertical">
                     <Form.Item label="Titulo">
@@ -42,6 +47,6 @@ const NewCategoryModal = forwardRef(({
             </Modal>
         </>
     )
-})
+}
 
 export default Form.create({ name: 'form_in_modal' })(NewCategoryModal);

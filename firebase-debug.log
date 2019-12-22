@@ -1,0 +1,46 @@
+[debug] [2019-12-21T19:06:22.829Z] ----------------------------------------------------------------------
+[debug] [2019-12-21T19:06:22.839Z] Command:       /usr/bin/node /usr/bin/firebase deploy --only functions
+[debug] [2019-12-21T19:06:22.840Z] CLI Version:   7.11.0
+[debug] [2019-12-21T19:06:22.840Z] Platform:      linux
+[debug] [2019-12-21T19:06:22.840Z] Node Version:  v13.3.0
+[debug] [2019-12-21T19:06:22.841Z] Time:          Sat Dec 21 2019 16:06:22 GMT-0300 (Brasilia Standard Time)
+[debug] [2019-12-21T19:06:22.841Z] ----------------------------------------------------------------------
+[debug] [2019-12-21T19:06:22.842Z] 
+[debug] [2019-12-21T19:06:22.862Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-12-21T19:06:22.863Z] > authorizing via signed-in user
+[debug] [2019-12-21T19:06:22.864Z] [iam] checking project stocksystem-22e6b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2019-12-21T19:06:22.868Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/stocksystem-22e6b:testIamPermissions  
+
+[debug] [2019-12-21T19:06:29.076Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'stocksystem-22e6b'...
+[info] 
+[info] i  deploying functions
+[debug] [2019-12-21T19:06:38.198Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "dependencies": {
+    "firebase-admin": "^8.6.0",
+    "firebase-functions": "^3.3.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.1.6"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2019-12-21T19:06:38.202Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/stocksystem-22e6b/services/cloudfunctions.googleapis.com  
+ 
+[debug] [2019-12-21T19:06:38.205Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/stocksystem-22e6b/services/runtimeconfig.googleapis.com  
+ 
+[debug] [2019-12-21T19:06:39.464Z] <<< HTTP RESPONSE 200

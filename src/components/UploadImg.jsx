@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, Icon, message } from 'antd';
-
-const { Dragger } = Upload;
+import { Upload, Button, Icon, message } from 'antd';
 
 const isFileSizeLt = (l, fileSize) => (fileSize / (1024 * l)) < (1024 * l); 
 
@@ -29,29 +27,27 @@ const props = {
     multiple: true
 };
 
-const UploadImg = () => {
+const UploadImg = ({ setFieldsValue }) => {
     const [fileList, setFileList] = useState([]);
 
-    const handleChange = (info) => setFileList(info.fileList);
-    const customUpload = ({ onError, onSuccess, file }) => {
-
+    const handleChange = (info) => {
+        const fileList = info.fileList.slice(-3);
+        setFileList(fileList);
+        setFieldsValue({ productImgs: fileList });
+    };
+    const customUpload = ({ _, onSuccess }) => {
+        onSuccess('ok');
     };
 
     return (
-        <Dragger 
+        <Upload 
             {...props} 
             onChange={handleChange}
             customRequest={customUpload}
             fileList={fileList.filter(file => isFileSizeLt(1, file.size))}
         >
-            <p className="ant-upload-drag-icon">
-                <Icon type="inbox" />
-            </p>
-            <p className="ant-upload-text">Clique ou arraste o arquivo para esta área para fazer o upload</p>
-            <p className="ant-upload-hint">
-                Suporte para um upload único ou até três arquivos.
-            </p>
-        </Dragger>
+            <Button type='upload'>Carregar Imagens</Button>            
+        </Upload>
     );
 };
 

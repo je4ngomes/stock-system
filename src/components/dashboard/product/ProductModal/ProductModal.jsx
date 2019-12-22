@@ -7,7 +7,6 @@ import {
     Row, 
     Input, 
     Select, 
-    DatePicker, 
     Icon, 
     InputNumber
 } from 'antd';
@@ -15,18 +14,32 @@ import UploadImg from '../../../UploadImg';
 
 const { Option } = Select;
 
+const formatter = (value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
 const ProductModal = ({
-    form: { getFieldDecorator, getFieldsValue }
+    form: { getFieldDecorator, getFieldValue, setFieldsValue, validateFields },
+    categories,
+    submit
 }) => {
     const [visible, setVisible] = useState(false);
-
     const showDrawer = () => setVisible(true);
     const handleClose = () => setVisible(false);
 
+    const getDiscount = () => {
+        const price = getFieldValue('price');
+        const discount = getFieldValue('discount');
+        return formatter(discount ? price - ((discount / 100) * price) : discount);
+    };
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(getFieldsValue)
-    }
+        
+        validateFields((err, values) => {
+            if (err) return;
+
+            submit(values);
+        })
+    };
 
     const normFile = e => {
         console.log('Upload event:', e);
@@ -64,41 +77,61 @@ const ProductModal = ({
                             rules: [{ required: true, message: 'Por favor, selecione uma categoria.' }],
                             })(
                             <Select placeholder="Categoria do produto">
-                                <Option value="xiao">Xiaoxiao Fu</Option>
-                                <Option value="mao">Maomao Zhou</Option>
-                            </Select>,
+                                {categories.map(category => (
+                                    <Option value={category.id}>{category.name}</Option>
+                                ))}
+                            </Select>
                             )}
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row gutter={16}>
-                    <Col span={12}>
-                        <Form.Item label="Preço">
+                    <Col span={8}>
+                        <Form.Item label={(
+                            <>
+                                Preço:{' '}
+                                <span style={{ fontSize: 13, color: '#43a047' }}>{formatter(getFieldValue('price'))}</span>
+                            </>
+                        )}>
                             {getFieldDecorator('price', {
-                            rules: [{ required: true, message: 'Por favor, informe o preço do produto.' }],
+                                initialValue: 0,
+                                rules: [{ required: true, message: 'Por favor, informe o preço do produto.' }],
                             })(<InputNumber
-                                style={{ width: 200 }} 
-                                formatter={value => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={value => value.replace(/R\$\s?|(,*)/g, '')}
+                                style={{ width: 190 }}
+                                min={0} 
                                 placeholder='Preço do produto' />)}
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
-                        <Form.Item label="Quantidade">
+                    <Col span={8}>
+                        <Form.Item label="Quantidade estoque">
                             {getFieldDecorator('quantity', {
-                            rules: [{ required: true, message: 'Por favor, informe a quantidade limite do produto.' }],
-                            })(<InputNumber style={{ width: 200 }} placeholder="Quantidade do produto" />)}
+                                rules: [{ required: true, message: 'Por favor, informe a quantidade limite do produto.' }],
+                            })(<InputNumber min={0} style={{ width: 190 }} />)}
                         </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item label={(
+                            <>
+                                Desconto %:{' '}
+                                <span style={{ fontSize: 13, color: '#ef5350' }}>{getDiscount()}</span>
+                            </>
+                        )}>
+                            {getFieldDecorator('discount', {
+                                initialValue: 0,
+                            })(<InputNumber
+                                style={{ width: 190 }}/>)}
+                        </Form.Item> 
                     </Col>
                 </Row>
                 <Row gutter={16}>
                     <Col span={24}>
-                        <Form.Item label="Apresentação">
+                        <Form.Item label="">
                             {getFieldDecorator('productImgs', {
                                 valuePropName: 'fileList',
+                                initialValue: [],
                                 getValueFromEvent: normFile
                             })(
-                                <UploadImg />
+                                <UploadImg setFieldsValue={setFieldsValue} />
                             )}
                         </Form.Item>
                     </Col>
