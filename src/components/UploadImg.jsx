@@ -46,7 +46,13 @@ const UploadImg = ({ setFieldsValue }) => {
             customRequest={customUpload}
             fileList={fileList.filter(file => isFileSizeLt(1, file.size))}
         >
-            <Button type='upload'>Carregar Imagens</Button>            
+            <Button 
+                shape='round'
+                style={{ background: '#66bb6a', borderColor: '#66bb6a', color: '#fff' }} 
+                type='upload'>
+                    <Icon type='upload' />
+                    Carregar Imagens
+            </Button>            
         </Upload>
     );
 };

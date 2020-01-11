@@ -7,12 +7,11 @@ import Title from 'antd/lib/typography/Title';
 import Topbar from '../components/layout/Topbar';
 import Sidebar from '../components/layout/Sidebar';
 
-import CategoriesPage from './CategoriesPage';
 import ProductsPage from './ProductsPage';
 import EventPage from './EventPage';
 import useOnAuthChange from '../hooks/useOnAuthChange';
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Sider, Footer } = Layout;
 
 const DashboardPage = () => {
     const match = useRouteMatch();
@@ -43,29 +42,29 @@ const DashboardPage = () => {
                 </Sider>
                 <Layout style={{ padding: '0 24px 24px 34px' }}>
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left' }}>
-                        {location.pathname.split('/').map(x => (<Breadcrumb.Item>{x}</Breadcrumb.Item>))}
+                        {location.pathname.split('/').map((x, i) => (<Breadcrumb.Item key={i}>{x}</Breadcrumb.Item>))}
                     </Breadcrumb>
                     <Content
                         style={{
-                        background: '#fff',
-                        padding: 24,
-                        margin: 0,
-                        minHeight:"100vh",
+                            background: '#fff',
+                            padding: 24,
+                            margin: 0,
+                            minHeight:"100vh"
                         }}
                     >
                         <Route path={`${match.path}/products`}>
                             <ProductsPage />
                         </Route>
                         <Route path={`${match.path}/orders`}></Route>
-                        <Route path={`${match.path}/categories`}>
-                            <CategoriesPage />
-                        </Route>
                         <Route path={`${match.path}/events`}>
                             <EventPage />
                         </Route>
                         <Route path={`${match.path}/statistics`}></Route>
                         <Route path={`${match.path}/configuration/account`}></Route>
                     </Content>
+                    <Footer className='footer__dashboard'>
+                        Footer
+                    </Footer>
                 </Layout>
             </Layout>
         </Layout>

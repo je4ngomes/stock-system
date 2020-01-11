@@ -11,14 +11,17 @@ import {
     InputNumber
 } from 'antd';
 import UploadImg from '../../../UploadImg';
+import CategorySelect from '../../../shared/CategorySelect';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 const formatter = (value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
 const ProductModal = ({
-    form: { getFieldDecorator, getFieldValue, setFieldsValue, validateFields },
+    form: { getFieldDecorator, getFieldValue, setFieldsValue, validateFields, resetFields },
     categories,
+    loading,
     submit
 }) => {
     const [visible, setVisible] = useState(false);
@@ -30,14 +33,16 @@ const ProductModal = ({
         const discount = getFieldValue('discount');
         return formatter(discount ? price - ((discount / 100) * price) : discount);
     };
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
         
         validateFields((err, values) => {
             if (err) return;
 
-            submit(values);
+            submit({...values, description: values.description});
+            resetFields();
+            setVisible(false);
         })
     };
 
@@ -76,11 +81,11 @@ const ProductModal = ({
                             {getFieldDecorator('category', {
                             rules: [{ required: true, message: 'Por favor, selecione uma categoria.' }],
                             })(
-                            <Select placeholder="Categoria do produto">
-                                {categories.map(category => (
-                                    <Option value={category.id}>{category.name}</Option>
-                                ))}
-                            </Select>
+                            <CategorySelect 
+                                showAction 
+                                getFieldValue={getFieldValue}
+                                setFieldsValue={setFieldsValue} 
+                                placeholder="Categoria do produto" />
                             )}
                         </Form.Item>
                     </Col>
@@ -129,6 +134,7 @@ const ProductModal = ({
                             {getFieldDecorator('productImgs', {
                                 valuePropName: 'fileList',
                                 initialValue: [],
+                                rules: [{ required: true, message: 'Selecione imagens' }],
                                 getValueFromEvent: normFile
                             })(
                                 <UploadImg setFieldsValue={setFieldsValue} />
@@ -138,15 +144,11 @@ const ProductModal = ({
                 </Row>
                 <Row gutter={16}>
                     <Col span={24}>
-                        <Form.Item label="Description">
+                        <Form.Item label="Descrição">
                             {getFieldDecorator('description', {
-                            rules: [
-                                {
-                                required: true,
-                                message: 'please enter url description',
-                                },
-                            ],
-                            })(<Input.TextArea rows={4} placeholder="please enter url description" />)}
+                                initialValue: '',
+                                rules: [{ required: true, message: 'Inserir detalhamento do produto' }]
+                            })(<TextArea />)}
                         </Form.Item>
                     </Col>
                 </Row>
@@ -163,11 +165,11 @@ const ProductModal = ({
                     textAlign: 'right',
                 }}
                 >
-                <Button onClick={handleClose} style={{ marginRight: 8 }}>
-                    Cancel
+                <Button onClick={handleClose} style={{ marginRight: 8, background: '#ef5350', color: '#fff' }}>
+                    Cancelar
                 </Button>
-                <Button type="primary" onClick={handleSubmit}>
-                    Submit
+                <Button type="primary" loading={loading} onClick={handleSubmit}>
+                    Adicionar
                 </Button>
             </div>
         </Drawer>

@@ -85,6 +85,10 @@ button[type=submit]:disabled:hover {
   min-height: 90vh;
 }
 
-.ant-card-meta-detail > div:not(:last-child) {
-    margin-bottom: 0;
+.center_dashboard_screen {
+    text-align: center;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

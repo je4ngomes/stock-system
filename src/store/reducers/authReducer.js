@@ -3,7 +3,7 @@ import {
     SIGNIN_ERROR, 
     AUTH_PROGRESS,
     SIGNUP_SUCCESS,
-    SIGNUP_ERROR, 
+    SIGNUP_ERROR,
     SIGNOUT_SUCCESS
 } from "../types";
 
@@ -15,7 +15,7 @@ const initState = {
 export default (state = initState, action) => {
     switch(action.type) {
         case AUTH_PROGRESS:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true }        
         case SIGNIN_SUCCESS:
             return { 
                 ...state, 

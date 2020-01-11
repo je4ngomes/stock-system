@@ -29,11 +29,6 @@ const Sidebar = () => {
                 <span>Produtos</span>
                 <Link to={`${match.url}/products`} />
             </Menu.Item>
-            <Menu.Item key={`${match.url}/categories`}>
-                <Icon type="unordered-list" />
-                <span>Categorias</span>
-                <Link to={`${match.url}/categories`} />
-            </Menu.Item>
             <Menu.Item key={`${match.url}/orders`}>
                 <Icon type='schedule' />
                 <span>Pedidos</span>

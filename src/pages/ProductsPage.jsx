@@ -1,42 +1,106 @@
-import React from 'react';
-import { Row, Col, Layout, Pagination } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { useFirestoreConnect } from 'react-redux-firebase';
+import { useSelector, useDispatch } from 'react-redux';
+import { Row, Col, Layout, Button } from 'antd';
+import styled from 'styled-components';
 
 import Title from 'antd/lib/typography/Title';
 
-import ProductCardCollection from '../components/dashboard/product/ProductCardCollection';
-import ProductModal from '../components/dashboard/product/ProductModal';
+import ProductCard from '../compone../components/shared/ProductCardCollection';
+import ProductCardCollect from '../components/shared/ProductCardollection';
+import CreateProductModal from '../components/dashboard/product/CreateProductModal';
 import SearcheableForm from '../components/SearcheableForm';
+import { fetchProductPaginated } from '../store/actions/productAction';
 
 const { Header, Content } = Layout;
 
+const Div = styled.div`
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+`;
+
 const ProductsPage = () => {
+    const [{ search, category }, setFilterBy] = useState({ search: '', category: 1 });
+    const dispatch = useDispatch();
+    useFirestoreConnect(() => ({ 
+            collection: 'products',
+            orderBy: ['timestamp', 'desc'],
+            limit: 8,
+            where: [
+                ['keywords', 'array-contains', search],
+                [category !== 1 ? 'category.category' : 'category.default', '==', category]
+            ] 
+    }));
+
+    const {
+        isLoading,
+        productLength,
+        isProductPagEmpty,
+        products
+    } = useSelector(({ firestore: { ordered }, product }) => {
+        const stateObj = {
+            products: [...(ordered.products || [null]), ...product.products],
+            isLoading: product.fetch_progress
+        };
+        const productLength = stateObj.products.length;
+
+        return { 
+            ...stateObj,
+            isProductPagEmpty: product.isProductPagEmpty, 
+            productLength        
+        }
+    });
+
+
+    const handleLoadMore = () => (
+        dispatch(
+            fetchProductPaginated(
+                products[products.length-1].timestamp,
+                category,
+                search
+            )
+        )
+    );
 
     return (
         <div>
             <Header style={{ lineHeight: 0 }}>
-                <Row>
-                    <Col md={4}>
+                <Div>
+                    <div>
                         <Title level={4}>Produtos</Title>
-                    </Col>
-                    <Col sm={4} md={14} offset={3}>
-                        <SearcheableForm handleSubmit={(x) => console.log(x)} categories={[{ name: 'Test', id: 1 },{ name: 'Test', id: 2 },{ name: 'Test', id: 3 },{ name: 'Test', id: 4 }]} />
-                    </Col>
-                    <Col sm={4} md={3} >
-                        <ProductModal />
-                    </Col>
-                </Row>
+                    </div>
+                    <div>
+                        <SearcheableForm handleSubmit={filterObj => setFilterBy({search, category, ...filterObj})}/>
+                    </div>
+                    <div>
+                        <CreateProductModal />
+                    </div>
+                </Div>
             </Header>
             <Content>
+                <div>
+                    <ProductCardCollection collection={products}>
+                        <ProductCard showAction/>
+                    </ProductCardCollection>
+                </div>
                 <Row>
-                    <ProductCardCollection 
-                        collection={[{ imgSrc: 'https://images.tcdn.com.br/img/img_prod/15959/console_playstation_4_pro_2_controles_4k_hd_1tb_hdmi_13632_2_20190124135815.jpg', title: 'Playstation 4 pro', price:1500 }]}/>
-                </Row>
-                <Row style={{ marginTop: 20, textAlign: 'center' }}>
-                    <Col span={24}>
-                        <Pagination
-                            onChange={(page, pageSize) => {}}
-                            total={10}/>
-                    </Col>
+                    <div style={{ textAlign: 'center', marginTop: 5 }}>
+                        {
+                            (productLength >= 8 && isProductPagEmpty > 0) && (
+                                <Button
+                                    shape='round'
+                                    className='pagination__btn'
+                                    onClick={handleLoadMore} 
+                                    loading={isLoading} 
+                                    type='primary'>
+                                    Carregar mais
+                                </Button>
+                            )
+                        }
+
+                    </div>
                 </Row>
             </Content>
         </div>

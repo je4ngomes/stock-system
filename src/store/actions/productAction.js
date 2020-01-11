@@ -1,14 +1,30 @@
 import firebase from 'firebase';
 import shortid from 'shortid';
-import { PRODUCT_CREATED, PRODUCT_PROGRESS, PRODUCT_ERROR } from '../types';
+import { 
+    PRODUCT_CREATED, 
+    PRODUCT_PROGRESS, 
+    PRODUCT_ERROR, 
+    PRODUCT_DELETED,
+    PRODUCT_FETCH_PROGRESS,
+    PRODUCT_DELETE_PROGRESS, 
+    PRODUCTS_FETCHED
+} from '../types';
+import { createKeywords } from '../../utils/utils';
 
-const uploadImg = (file) => {
+export const uploadImg = file => {
     const fileRef = `images/${shortid.generate()}`;
     const childRef = firebase.storage().ref().child(fileRef);
 
     return childRef.put(file.originFileObj, { contentType: file.type })
         .then(_ => childRef.getDownloadURL());
 };
+
+const deleteImgByUrlRef = url => (
+    firebase
+        .storage()
+        .refFromURL(url)
+        .delete()
+);
 
 export const createProduct = product => dispatch => {
     const user = firebase.auth().currentUser;
@@ -18,24 +34,50 @@ export const createProduct = product => dispatch => {
     Promise.all(product.productImgs.map(uploadImg))
         .then(urls => 
             db.collection('products').doc().set({
-                name: product.name,
-                price: product.price,
+                name: product.name.toLowerCase(),
+                price: parseFloat(product.price),
                 discount: product.discount,
                 description: product.description,
                 quantity: product.quantity,
                 imgUrls: urls,
-                category: db.doc(`/categories/${product.category}`),
-                createdBy: db.doc(`/users/${user.uid}`)
+                category: { default: 1, category: product.category },
+                createdBy: db.doc(`/users/${user.uid}`),
+                keywords: createKeywords(product.name),
+                timestamp: +new Date()
             })
         )
         .then(() => dispatch({ type: PRODUCT_CREATED }))
-        .catch(e => dispatch({ type: PRODUCT_ERROR }));
+        .catch(e => dispatch({ type: PRODUCT_ERROR, payload: e }));
 };
 
-const updateProduct = product => dispatch => {
+export const updateProduct = product => dispatch => {
 
 };
 
-const deleteProduct = product => dispatch => {
+export const fetchProductPaginated = (startAfter, category, search) => dispatch => {
+    dispatch({ type: PRODUCT_FETCH_PROGRESS });
+    firebase.firestore()
+        .collection('products')
+        .orderBy('timestamp')
+        .startAfter(startAfter)
+        .where(category !== 1 ? 'category.category' : 'category.default', '==', category)
+        .where('keywords', 'array-contains', search)
+        .limit(8)
+        .get()
+        .then(({ docs }) => {
+            dispatch({ type: PRODUCTS_FETCHED, payload: docs.map(doc => doc.data()) })
+        })
+};
 
+export const deleteProduct = productId => dispatch => {
+    const db = firebase.firestore();
+    const docRef = db.collection('products').doc(productId);
+
+    dispatch({ type: PRODUCT_DELETE_PROGRESS });
+    
+    docRef.get()
+        .then(doc => doc.data().imgUrls.forEach(deleteImgByUrlRef))
+        .then(() => docRef.delete())
+        .then(() => dispatch({ type: PRODUCT_DELETED }))
+        .catch(e => dispatch({ type: PRODUCT_ERROR, payload: e }));
 };
