@@ -6,8 +6,6 @@ import { Col, Row, Empty } from 'antd';
 import spinner from '../../assets/spinner.svg';
 import device from '../../utils/device';
 
-const { table, mobile, desktop } = device('min');
-
 const Div = styled.div`
     display: flex;
     flex-flow: row wrap;

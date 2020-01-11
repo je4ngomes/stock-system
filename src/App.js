@@ -7,16 +7,20 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import ScreenLoader from './components/ScreenLoader';
 import useAuthReady from './hooks/useAuthReady';
+import StorePage from './pages/StorePage';
 
 function App() {
     const isAuthReady = useAuthReady();
 
-    if(!isAuthReady) return <ScreenLoader />
+    // if(!isAuthReady) return <ScreenLoader />
 
     return (
     <div className="App">
         <Router>
             <Switch>
+                <Route exact path='/'>
+                    <StorePage/>
+                </Route>
                 <Route path='/login'>
                     <LoginPage/>
                 </Route>

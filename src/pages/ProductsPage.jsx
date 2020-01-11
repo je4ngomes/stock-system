@@ -6,8 +6,8 @@ import styled from 'styled-components';
 
 import Title from 'antd/lib/typography/Title';
 
-import ProductCard from '../compone../components/shared/ProductCardCollection';
-import ProductCardCollect from '../components/shared/ProductCardollection';
+import ProductCard from '../components/shared/ProductCard';
+import ProductCardCollection from '../components/shared/ProductCardCollection';
 import CreateProductModal from '../components/dashboard/product/CreateProductModal';
 import SearcheableForm from '../components/SearcheableForm';
 import { fetchProductPaginated } from '../store/actions/productAction';
