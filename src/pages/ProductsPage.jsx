@@ -10,7 +10,7 @@ import ProductCard from '../components/shared/ProductCard';
 import ProductCardCollection from '../components/shared/ProductCardCollection';
 import CreateProductModal from '../components/dashboard/product/CreateProductModal';
 import SearcheableForm from '../components/SearcheableForm';
-import { fetchProductPaginated } from '../store/actions/productAction';
+import useFetchProducts from '../hooks/useFetchProducts';
 
 const { Header, Content } = Layout;
 
@@ -22,47 +22,22 @@ const Div = styled.div`
 `;
 
 const ProductsPage = () => {
-    const [{ search, category }, setFilterBy] = useState({ search: '', category: 1 });
-    const dispatch = useDispatch();
-    useFirestoreConnect(() => ({ 
-            collection: 'products',
-            orderBy: ['timestamp', 'desc'],
-            limit: 8,
-            where: [
-                ['keywords', 'array-contains', search],
-                [category !== 1 ? 'category.category' : 'category.default', '==', category]
-            ] 
-    }));
-
+    const [{ search, brand }, setFilterBy] = useState({ search: '', brand: 1 });
     const {
         isLoading,
         productLength,
         isProductPagEmpty,
-        products
-    } = useSelector(({ firestore: { ordered }, product }) => {
-        const stateObj = {
-            products: [...(ordered.products || [null]), ...product.products],
-            isLoading: product.fetch_progress
-        };
-        const productLength = stateObj.products.length;
-
-        return { 
-            ...stateObj,
-            isProductPagEmpty: product.isProductPagEmpty, 
-            productLength        
-        }
-    });
-
-
-    const handleLoadMore = () => (
-        dispatch(
-            fetchProductPaginated(
-                products[products.length-1].timestamp,
-                category,
-                search
-            )
-        )
-    );
+        products,
+        fetchMore
+    } = useFetchProducts(() => ({ 
+        collection: 'products',
+        orderBy: ['timestamp', 'desc'],
+        limit: 8,
+        where: [
+            ['keywords', 'array-contains', search],
+            [brand !== 1 ? 'brand.brand' : 'brand.default', '==', brand]
+        ] 
+    }), { brand, search });
 
     return (
         <div>
@@ -72,7 +47,7 @@ const ProductsPage = () => {
                         <Title level={4}>Produtos</Title>
                     </div>
                     <div>
-                        <SearcheableForm handleSubmit={filterObj => setFilterBy({search, category, ...filterObj})}/>
+                        <SearcheableForm handleSubmit={filterObj => setFilterBy({search, brand, ...filterObj})}/>
                     </div>
                     <div>
                         <CreateProductModal />
@@ -92,7 +67,7 @@ const ProductsPage = () => {
                                 <Button
                                     shape='round'
                                     className='pagination__btn'
-                                    onClick={handleLoadMore} 
+                                    onClick={fetchMore} 
                                     loading={isLoading} 
                                     type='primary'>
                                     Carregar mais

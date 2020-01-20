@@ -13,7 +13,7 @@ import DisplayPrice from '../DisplayPrice';
 const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex',
-    height: 150,
+    minHeight: 150,
     width: '100%',
     '&:hover': {
         cursor: 'pointer'
@@ -28,50 +28,54 @@ const useStyles = makeStyles(theme => ({
   },
   cover: {
     width: 151,
+  },
+  title: {
+      textTransform: 'capitalize'
   }
 }));
 
 const ProductCard = ({
     imgSrc,
     price,
-    key,
+    id,
     discount,
     onEdit,
     deleteLoading,
     onDelete,
     title,
+    hasLink,
     showAction
 }) => {
     const classes = useStyles();
     
     return (
-        <Card className={classes.card}>
-            <CardMedia
-                className={classes.cover}
-                image={imgSrc}
-                title={title}
-            />
-            <div className={classes.details}>
-                <CardContent className={classes.content}>
-                    <Link to='#'>
-                        <Typography component="h5" variant="h5">
+        <Link to={hasLink ? `/store/view/${id}` : '#'}>
+            <Card className={classes.card}>
+                <CardMedia
+                    className={classes.cover}
+                    image={imgSrc}
+                    title={title}
+                />
+                <div className={classes.details}>
+                    <CardContent className={classes.content}>
+                        <Typography className={classes.title} component="h5" variant="h5">
                             {title}
                         </Typography>
-                    </Link>
-                    <DisplayPrice price={price} discount={discount}/>
-                </CardContent>
-            </div>
-            {showAction && (
-                <CardActions>
-                    <Button onClick={onEdit} shape='circle' type="primary">
-                        <Icon type="edit" theme='filled' />
-                    </Button>
-                    <Button loading={deleteLoading} onClick={onDelete} shape='circle' type="danger">
-                        <Icon type="delete" theme='filled' />
-                    </Button>
-                </CardActions>            
-            )}
-        </Card>
+                        <DisplayPrice price={price} discount={discount}/>
+                    </CardContent>
+                </div>
+                {showAction && (
+                    <CardActions>
+                        <Button onClick={onEdit} shape='circle' type="primary">
+                            <Icon type="edit" theme='filled' />
+                        </Button>
+                        <Button loading={deleteLoading} onClick={onDelete} shape='circle' type="danger">
+                            <Icon type="delete" theme='filled' />
+                        </Button>
+                    </CardActions>            
+                )}
+            </Card>
+        </Link>
     );
 }
 

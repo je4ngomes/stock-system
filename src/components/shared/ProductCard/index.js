@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ProductCard from './ProductCard';
 import { deleteProduct } from '../../../store/actions/productAction';
 
-export default ({ product, showAction=false, hasLink }) => {
+export default ({ product, showAction=false, hasLink=false }) => {
     const [productSelected, setProductSelected] = useState(null);
     const { deleteLoading } = useSelector(state => ({ ...state.product }));
     const dispatch = useDispatch();
@@ -21,7 +21,8 @@ export default ({ product, showAction=false, hasLink }) => {
     return (
         <ProductCard                     
             showAction={showAction}
-            hasLink
+            hasLink={hasLink}
+            id={product.id}
             imgSrc={product.imgUrls[0]}
             title={product.name}
             price={product.price}

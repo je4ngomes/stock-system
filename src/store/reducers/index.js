@@ -5,13 +5,13 @@ import { firebaseReducer } from 'react-redux-firebase';
 import authReducer from './authReducer';
 import eventReducer from './eventReducer'
 import productReducer from './productReducer';
-import categoryReducer from './categoryReducer';
+import brandReducer from './brandReducer';
 
 export default combineReducers({
     auth: authReducer,
     event: eventReducer,
     product: productReducer,
-    category: categoryReducer,
+    brand: brandReducer,
     firestore: firestoreReducer,
     firebase: firebaseReducer
 });

@@ -92,3 +92,9 @@ button[type=submit]:disabled:hover {
     flex-direction: column;
     justify-content: center;
 }
+
+.image-gallery-right-nav .image-gallery-svg,
+.image-gallery-left-nav .image-gallery-svg {
+    height: 60px !important;
+    width: 50px !important;
+}

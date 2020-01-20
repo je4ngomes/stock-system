@@ -30,17 +30,19 @@ export const createProduct = product => dispatch => {
     const user = firebase.auth().currentUser;
     const db = firebase.firestore();
 
+    const docId = product.name.toLowerCase().split(/\s/).join('_')+shortid.generate();
+
     dispatch({ type: PRODUCT_PROGRESS });
     Promise.all(product.productImgs.map(uploadImg))
         .then(urls => 
-            db.collection('products').doc().set({
+            db.collection('products').doc(docId).set({
                 name: product.name.toLowerCase(),
                 price: parseFloat(product.price),
                 discount: product.discount,
                 description: product.description,
                 quantity: product.quantity,
                 imgUrls: urls,
-                category: { default: 1, category: product.category },
+                brand: { default: 1, brand: product.brand },
                 createdBy: db.doc(`/users/${user.uid}`),
                 keywords: createKeywords(product.name),
                 timestamp: +new Date()
@@ -54,13 +56,13 @@ export const updateProduct = product => dispatch => {
 
 };
 
-export const fetchProductPaginated = (startAfter, category, search) => dispatch => {
+export const fetchProductPaginated = (startAfter, brand, search) => dispatch => {
     dispatch({ type: PRODUCT_FETCH_PROGRESS });
     firebase.firestore()
         .collection('products')
         .orderBy('timestamp')
         .startAfter(startAfter)
-        .where(category !== 1 ? 'category.category' : 'category.default', '==', category)
+        .where(brand !== 1 ? 'brand.brand' : 'brand.default', '==', brand)
         .where('keywords', 'array-contains', search)
         .limit(8)
         .get()

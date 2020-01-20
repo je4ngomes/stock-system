@@ -11,7 +11,7 @@ import {
     InputNumber
 } from 'antd';
 import UploadImg from '../../../UploadImg';
-import CategorySelect from '../../../shared/CategorySelect';
+import BrandSelector from '../../../shared/BrandSelector';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -77,15 +77,15 @@ const ProductModal = ({
                     </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label="Categorias">
-                            {getFieldDecorator('category', {
-                            rules: [{ required: true, message: 'Por favor, selecione uma categoria.' }],
+                        <Form.Item label="Marcas">
+                            {getFieldDecorator('brand', {
+                            rules: [{ required: true, message: 'Por favor, selecione uma marca.' }],
                             })(
-                            <CategorySelect 
+                            <BrandSelector 
                                 showAction 
                                 getFieldValue={getFieldValue}
                                 setFieldsValue={setFieldsValue} 
-                                placeholder="Categoria do produto" />
+                                placeholder="Marca do produto" />
                             )}
                         </Form.Item>
                     </Col>

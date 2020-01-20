@@ -25,7 +25,8 @@ const DashboardPage = () => {
         // but only those who has admin privileges can stay
         const currentUser = firebase.auth().currentUser;
         if (!currentUser) return;
-        currentUser.getIdTokenResult(({ claims: { isAdmin } }) => !isAdmin && history.push('/'));
+
+        currentUser.getIdTokenResult().then(({ claims: { isAdmin } }) => !isAdmin && history.push('/store'));
     });
 
     return (

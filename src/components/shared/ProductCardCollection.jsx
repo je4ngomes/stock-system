@@ -8,8 +8,8 @@ import device from '../../utils/device';
 
 const Div = styled.div`
     display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
+    flex-flow: column;
+    justify-content: space-between;
 `;
 
 const DivChild = styled.div`

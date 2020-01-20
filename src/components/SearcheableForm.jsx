@@ -6,7 +6,7 @@ import {
     Button, 
     Icon
 } from 'antd';
-import CategorySelect from './shared/CategorySelect';
+import BrandSelector from './shared/BrandSelector';
 
 const { Option } = Select;
 
@@ -38,7 +38,7 @@ function SearcheableForm({
                     //         <Option key={category.id} value={category.id}>{category.name}</Option>
                     //     ))}
                     // </Select>
-                    <CategorySelect onSelect={val => submit({ category: val })} placeholder="Categoria do produto"/>
+                    <BrandSelector onSelect={val => submit({ category: val })} placeholder="Categoria do produto"/>
                 )}
             </Form.Item>
             <Form.Item>

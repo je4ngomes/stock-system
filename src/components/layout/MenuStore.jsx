@@ -1,18 +1,27 @@
-import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { 
+    Menu, 
+    MenuItem,
+    AppBar,
+    Toolbar,
+    IconButton,
+    Typography,
+    InputBase,
+    Badge,
+    Button
+} from '@material-ui/core';
+import {
+    Search as SearchIcon,
+    Notifications as NotificationsIcon,
+    ShoppingCart as ShoppingCartIcon,
+    MoreVert as MoreIcon,
+    AccountCircle
+} from '@material-ui/icons';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Badge from '@material-ui/core/Badge';
+import { signOut } from '../../store/actions/authAction';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -87,22 +96,76 @@ const useStyles = makeStyles(theme => ({
 
 const MenuStore = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleProfileMenuOpen = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMobileMenuOpen = event => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleSignOut = () => {
+        dispatch(signOut());
+        handleMenuClose();
+  }
+
+  const menuId = 'primary-search-account-menu';
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>Minha Conta</MenuItem>
+      <MenuItem onClick={handleSignOut}>Sair</MenuItem>
+    </Menu>
+  );
+
+  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const renderMobileMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      <MenuItem onClick={handleMobileMenuClose}>Sair</MenuItem>
+    </Menu>
+  );
 
   return (
     <div className={classes.root}>
       <AppBar position="static" elevation={1}>
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Global Manager
-          </Typography>
+          <Link to='/store'>
+            <Typography className={classes.title} variant="h6" noWrap>
+                Global Manager
+            </Typography>
+          </Link>
          <div className={classes.grow} />
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -124,24 +187,39 @@ const MenuStore = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton color="inherit">
-              <Badge badgeContent={6} color="secondary">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
+            <Link to='/store/cart' style={{ color: '#fff' }}>
+                <IconButton color="inherit">
+                <Badge badgeContent={6} color="secondary">
+                    <ShoppingCartIcon />
+                </Badge>
+                </IconButton>            
+            </Link>
             <IconButton
               edge="end"
               aria-label="account of current user"
               aria-controls={'primary-search-account-menu'}
               aria-haspopup="true"
-            //   onClick={handleProfileMenuOpen}
+              onClick={handleProfileMenuOpen}
               color="inherit"
             >
               <AccountCircle />
             </IconButton>
           </div>
+          <div className={classes.sectionMobile}>
+            <IconButton
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
+      {renderMenu}
+      {renderMobileMenu}
     </div>
   );
 };

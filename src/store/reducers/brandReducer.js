@@ -1,8 +1,8 @@
 import { 
-    CATEGORY_CREATED,
-    CATEGORY_DELETED,
-    CATEGORY_PROGRESS,
-    CATEGORY_ERROR 
+    BRAND_CREATED,
+    BRAND_DELETED,
+    BRAND_PROGRESS,
+    BRAND_ERROR 
 } from "../types";
 
 const initState = {
@@ -13,13 +13,13 @@ const initState = {
 export default (state = initState, action) => {
 
     switch(action.type) {
-        case CATEGORY_PROGRESS:
+        case BRAND_PROGRESS:
             return { ...state, loading: true };
-        case CATEGORY_CREATED:
+        case BRAND_CREATED:
             return { ...state, loading: false };
-        case CATEGORY_DELETED:
+        case BRAND_DELETED:
             return { ...state, loading: false };
-        case CATEGORY_ERROR:
+        case BRAND_ERROR:
             return { ...state, loading: false, error: action.payload.message }
         default: 
             return state;

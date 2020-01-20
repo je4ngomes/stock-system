@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -6,12 +6,10 @@ import {
     Icon, 
     Input, 
     Button, 
-    Checkbox,
-    message
+    Checkbox
 } from 'antd';
 
 import { signIn } from '../../store/actions/authAction';
-import useRedirectAuthenticatedUser from '../../hooks/useRedirectAuthenticatedUser';
 
 const LoginForm = ({ 
     form: { 
@@ -19,17 +17,10 @@ const LoginForm = ({
         validateFields
     } 
 }) => {   
-    const {  authError, isLoading, auth } = useSelector(state => ({
-        auth: state.firebase.auth,
-        isLoading: state.auth.isLoading,
-        authError: state.auth.error
-    }));
     const dispatch = useDispatch();
-
-    useRedirectAuthenticatedUser({
-        redirectAdminTo: '/dashboard',
-        redirectUserTo: '/'
-    }, [auth.uid]);
+    const {  isLoading } = useSelector(state => ({
+        isLoading: state.auth.isLoading,
+    }));
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -40,12 +31,6 @@ const LoginForm = ({
             dispatch(signIn({ email: email.trim(), password, remember  }));
         });
     };
-
-    
-    useEffect(() => {
-        if (authError)
-            message.error(authError.message, 3);
-    }, [authError]);
     
     return (
         <Form onSubmit={handleSubmit} className="login__form">

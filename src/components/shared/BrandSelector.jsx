@@ -10,55 +10,55 @@ import {
 } from 'antd';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCategory, deleteCategory } from '../../store/actions/categoryAction';
+import { createBrand, deleteBrand } from '../../store/actions/brandAction';
 
 const { Option } = Select;
 
-const CategorySelect = ({ showAction, getFieldValue, setFieldsValue, ...props }) => {
+const BrandSelector = ({ showAction, getFieldValue, setFieldsValue, ...props }) => {
     useFirestoreConnect({
-        collection: 'categories',
+        collection: 'brands',
         orderBy: 'name'
     });
 
     const {
-        categories,
+        brands,
         loading,
         error
-    } = useSelector(({ firestore: { ordered }, category }) => ({
-        categories: ordered.categories || [],
-        ...category
+    } = useSelector(({ firestore: { ordered }, brand }) => ({
+        brands: ordered.brands || [],
+        ...brand
     }));
     const dispatch = useDispatch();
-    const [categoryName, setCategoryName] = useState('');
+    const [brandName, setBrandName] = useState('');
     const [visible, setVisible] = useState(false);
 
-    const addCategory = () => {
-        if (categoryName.trim() === '') return;
+    const addBrand = () => {
+        if (brandName.trim() === '') return;
 
-        dispatch(createCategory(categoryName));
+        dispatch(createBrand(brandName));
         setVisible(false);
-        setCategoryName('');
+        setBrandName('');
     };
 
-    const removeCategorySelected = () => {
+    const removeBrandSelected = () => {
         dispatch(
-            deleteCategory(getFieldValue('category'))
+            deleteBrand(getFieldValue('brand'))
         );
-        setFieldsValue({ category: undefined });
+        setFieldsValue({ brand: undefined });
     }
 
     const contentPopOver = (
         <div>
             <Input
-                onChange={({ target: { value } }) => setCategoryName(value)}
-                value={categoryName}
+                onChange={({ target: { value } }) => setBrandName(value)}
+                value={brandName}
                 required 
-                name='categoryName' />
+                name='brandName' />
             <Button 
                 size='small'
                 style={{ marginTop: 10 }} 
                 type='primary' 
-                onClick={addCategory}>
+                onClick={addBrand}>
                 <Icon type='plus' /> Add 
             </Button>
         </div>
@@ -74,23 +74,23 @@ const CategorySelect = ({ showAction, getFieldValue, setFieldsValue, ...props })
         <div>
             <Select 
                 showSearch 
-                placeholder="Categoria do produto"
+                placeholder="Marca do produto"
                 style={{ width: 170 }}
                 loading={loading}
                 notFoundContent='Nada a ser exibido'
                 {...props}
             >
                 {!showAction && <Option key={1} value={1}>Todos</Option>}
-                {categories.map(category => (
-                    <Option key={category.id} value={category.id}>
-                        {category.name}{' '}
+                {brands.map(brand => (
+                    <Option key={brand.id} value={brand.id}>
+                        {brand.name}{' '}
                     </Option>
                 ))}
             </Select>
             {showAction && (
                 <div style={{ marginLeft: 10, display: 'inline-block' }}>
                     <Popover
-                        title='Nova categoria'
+                        title='Nova marca'
                         placement='bottom'
                         content={contentPopOver}
                         visible={visible}
@@ -102,10 +102,10 @@ const CategorySelect = ({ showAction, getFieldValue, setFieldsValue, ...props })
                     </Popover>
 
                     <Button 
-                        disabled={!Boolean(getFieldValue('category'))} 
+                        disabled={!Boolean(getFieldValue('brand'))} 
                         shape='circle'
                         style={{ marginLeft: 5}}
-                        onClick={removeCategorySelected} 
+                        onClick={removeBrandSelected} 
                         size='small' 
                         type='danger'>
                         <Icon type='minus' />
@@ -116,4 +116,4 @@ const CategorySelect = ({ showAction, getFieldValue, setFieldsValue, ...props })
     );
 };
 
-export default CategorySelect;
+export default BrandSelector;

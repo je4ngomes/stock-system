@@ -1,14 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Row,
     Col,
+    message,
 } from 'antd';
+import { useSelector } from 'react-redux';
+import useRedirectAuthenticatedUser from '../hooks/useRedirectAuthenticatedUser';
 import Title from 'antd/lib/typography/Title';
 
 import LoginForm from '../components/Login/LoginForm';
 import PaneContainer from '../components/PaneContainer';
+import ScreenLoader from '../components/ScreenLoader';
 
 function LoginPage() {
+    const {  authError, auth } = useSelector(state => ({
+        auth: state.firebase.auth,
+        authError: state.auth.error
+    }));
+
+    const isLoading = useRedirectAuthenticatedUser({
+        redirectAdminTo: '/dashboard',
+        redirectUserTo: '/store'
+    }, [auth.uid]);
+
+    useEffect(() => {
+        if (authError)
+            message.error(authError.message, 3);
+    }, [authError]);
+
+    if (isLoading) return <ScreenLoader/>;
+
     return (
         <div className='auth__page'>
             <Row>
