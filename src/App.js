@@ -10,11 +10,11 @@ import useAuthReady from './hooks/useAuthReady';
 import StorePage from './pages/StorePage';
 
 const ComponentWithAuthLoader = ({ component: Component, isAuthReady }) => (
-    true ? <Component /> : <ScreenLoader />
+    isAuthReady ? <Component /> : <ScreenLoader />
 );
 
 function App() {
-    const isAuthReady = null//useAuthReady();
+    const isAuthReady = useAuthReady();
 
     return (
         <div className="App">
